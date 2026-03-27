@@ -10,6 +10,6 @@ import { BASE_URL } from "../api";
  */
 export const getImageUrl = (path) => {
     if (!path) return null;
-    if (path.startsWith("http")) return path;
+    if (path.startsWith("http") || path.startsWith("data:")) return path;
     return `${BASE_URL}/uploads/${path}`;
 };

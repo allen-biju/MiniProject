@@ -305,11 +305,11 @@ function Marketplace() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                  <button className="buy-btn-small" style={{ flex: 1, backgroundColor: "#f3f4f6", color: "#ffffffff" }} onClick={(e) => handleAddToCart(e, item._id)} disabled={addingIds[item._id]}>
+                <div className="item-actions-row">
+                  <button className="cart-btn-small" onClick={(e) => handleAddToCart(e, item._id)} disabled={addingIds[item._id]}>
                     {addingIds[item._id] ? "Adding..." : "🛒 Cart"}
                   </button>
-                  <button className="buy-btn-small" style={{ flex: 1 }} onClick={() => viewItem(item)}>
+                  <button className="details-btn-small" onClick={() => viewItem(item)}>
                     View Details
                   </button>
                 </div>
