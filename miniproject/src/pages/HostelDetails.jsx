@@ -202,7 +202,7 @@ function HostelDetails() {
 
             {hostel.distanceFromCollege && (
               <div className="hd-quick-item">
-                <div className="hd-quick-item-icon">🎓</div>
+                <div className="hd-quick-item-icon">🚶</div>
                 <div className="hd-quick-item-content">
                   <div className="hd-quick-item-label">Dist. to College</div>
                   <div className="hd-quick-item-value">{hostel.distanceFromCollege}</div>

@@ -276,74 +276,98 @@ function SellerProfile() {
                                 <p className="text-sm text-gray-400">There are no reviews yet for this seller.</p>
                             </div>
                         ) : (
-                            <div className="space-y-10">
-                                {reviews.map((review, i) => (
-                                    <div key={review._id} className={`flex flex-col sm:flex-row gap-6 ${i !== reviews.length - 1 ? 'pb-10 border-b border-gray-100' : ''}`}>
-                                        
-                                        <div className="w-14 h-14 flex-shrink-0">
-                                            {review.reviewerId?.profilePic ? (
-                                                <img src={getImageUrl(review.reviewerId.profilePic)} alt="Reviewer" className="w-full h-full rounded-full object-cover shadow-sm bg-gray-50" />
-                                            ) : (
-                                                <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-gray-400 font-black text-xl">
-                                                    {review.reviewerId?.name?.charAt(0) || "U"}
+                            <div className="space-y-10">                                {reviews.map((review, i) => (
+                                    <div 
+                                        key={review._id} 
+                                        className="bg-gray-50/30 border border-gray-100 rounded-3xl p-6 md:p-8 transition-all hover:border-blue-100 hover:bg-blue-50/10 group"
+                                    >
+                                        <div className="flex flex-col sm:flex-row gap-6">
+                                            {/* Reviewer Info Column */}
+                                            <div className="flex sm:flex-col items-center sm:items-start gap-4 sm:w-40 flex-shrink-0">
+                                                <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-sm border-2 border-white bg-white">
+                                                    {review.reviewerId?.profilePic ? (
+                                                        <img src={getImageUrl(review.reviewerId.profilePic)} alt="Reviewer" className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-blue-600 bg-blue-50 font-black text-xl">
+                                                            {review.reviewerId?.name?.charAt(0) || "U"}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
-                                        </div>
-                                        
-                                        <div className="flex-1 max-w-3xl">
-                                            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2">
-                                                <h4 className="font-black text-gray-900 text-lg">{review.reviewerId?.name || "Unknown Buyer"}</h4>
-                                                <span className="text-xs uppercase tracking-widest font-bold text-gray-400">
-                                                    {new Date(review.createdAt).toLocaleDateString(undefined, {year: 'numeric', month: 'long', day: 'numeric'})}
-                                                </span>
+                                                <div className="flex flex-col">
+                                                    <h4 className="font-black text-gray-900 text-base leading-tight truncate max-w-[120px]" title={review.reviewerId?.name}>
+                                                        {review.reviewerId?.name || "Unknown Buyer"}
+                                                    </h4>
+                                                    <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mt-1">
+                                                        {new Date(review.createdAt).toLocaleDateString(undefined, {year: 'numeric', month: 'short', day: 'numeric'})}
+                                                    </span>
+                                                </div>
                                             </div>
                                             
-                                            <div className="flex text-yellow-500 mb-3 gap-0.5">
-                                                {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
-                                            </div>
-                                            
-                                            <p className="text-gray-800 text-base leading-relaxed mb-4">"{review.comment}"</p>
-
-                                            {/* Minimal Ordered Item Context */}
-                                            {review.orderId && (
-                                                <div className="inline-flex items-center gap-3 pr-4 py-2 border border-gray-100 rounded-full bg-gray-50/50 hover:bg-gray-100 transition-colors w-max overflow-hidden max-w-full">
-                                                    {(() => {
-                                                        const order = review.orderId;
-                                                        const hasItems = order.items && order.items.length > 0;
-                                                        
-                                                        // Resolve Title
-                                                        const itemTitle = order.itemTitle || 
-                                                                        (order.itemId && order.itemId.title) || 
-                                                                        (hasItems && order.items[0].itemTitle) || 
-                                                                        (hasItems && order.items[0].itemId && order.items[0].itemId.title) || 
-                                                                        "Purchased Item";
-                                                        
-                                                        // Resolve Image
-                                                        const itemImage = order.itemImage || 
-                                                                        (order.itemId && order.itemId.image) || 
-                                                                        (hasItems && order.items[0].itemImage) || 
-                                                                        (hasItems && order.items[0].itemId && order.items[0].itemId.image);
-
-                                                        return (
-                                                            <>
-                                                                {itemImage ? (
-                                                                    <img 
-                                                                        src={getImageUrl(itemImage)} 
-                                                                        alt={itemTitle} 
-                                                                        className="w-8 h-8 rounded-full ml-1 bg-white shadow-sm object-cover" 
-                                                                    />
-                                                                ) : (
-                                                                    <div className="w-8 h-8 rounded-full ml-1 bg-gray-200 flex items-center justify-center text-[10px]">🖼</div>
-                                                                )}
-                                                                <div className="flex flex-col truncate">
-                                                                    <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest leading-none mb-0.5">Purchased</span>
-                                                                    <span className="text-xs font-bold text-gray-700 leading-none truncate">{itemTitle}</span>
-                                                                </div>
-                                                            </>
-                                                        );
-                                                    })()}
+                                            {/* Review Content Column */}
+                                            <div className="flex-1 flex flex-col pt-1">
+                                                <div className="flex items-center gap-1 mb-3">
+                                                    {[...Array(5)].map((_, idx) => (
+                                                        <Star 
+                                                            key={idx} 
+                                                            size={16} 
+                                                            className={`${idx < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'} transition-colors`}
+                                                        />
+                                                    ))}
                                                 </div>
-                                            )}
+                                                
+                                                <p className="text-gray-700 text-lg leading-relaxed mb-6 font-medium italic">
+                                                    "{review.comment}"
+                                                </p>
+
+                                                {/* Purchased Item Context - Refined */}
+                                                {review.orderId && (
+                                                    <div 
+                                                        className="mt-auto self-start flex items-center gap-3 p-1.5 pr-4 rounded-2xl bg-white border border-gray-100 shadow-sm hover:border-blue-200 transition-all cursor-pointer group/item"
+                                                        onClick={() => {
+                                                            const order = review.orderId;
+                                                            const hasItems = order.items && order.items.length > 0;
+                                                            const itemId = order.itemId?._id || order.itemId || (hasItems && (order.items[0].itemId?._id || order.items[0].itemId));
+                                                            if (itemId) viewItem(itemId);
+                                                        }}
+                                                    >
+                                                        {(() => {
+                                                            const order = review.orderId;
+                                                            const hasItems = order.items && order.items.length > 0;
+                                                            
+                                                            const itemTitle = order.itemTitle || 
+                                                                            (order.itemId && order.itemId.title) || 
+                                                                            (hasItems && order.items[0].itemTitle) || 
+                                                                            (hasItems && order.items[0].itemId && order.items[0].itemId.title) || 
+                                                                            "Purchased Item";
+                                                            
+                                                            const itemImage = order.itemImage || 
+                                                                            (order.itemId && order.itemId.image) || 
+                                                                            (hasItems && order.items[0].itemImage) || 
+                                                                            (hasItems && order.items[0].itemId && order.items[0].itemId.image);
+
+                                                            return (
+                                                                <>
+                                                                    <div className="w-10 h-10 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
+                                                                        {itemImage ? (
+                                                                            <img 
+                                                                                src={getImageUrl(itemImage)} 
+                                                                                alt={itemTitle} 
+                                                                                className="w-full h-full object-cover transition-transform group-hover/item:scale-110" 
+                                                                            />
+                                                                        ) : (
+                                                                            <div className="w-full h-full flex items-center justify-center text-lg bg-gray-100">📦</div>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="flex flex-col min-w-0 max-w-[200px]">
+                                                                        <span className="text-[10px] text-gray-400 uppercase font-black tracking-widest leading-none mb-1">Purchased</span>
+                                                                        <span className="text-xs font-bold text-gray-800 truncate leading-tight group-hover/item:text-blue-600 transition-colors">{itemTitle}</span>
+                                                                    </div>
+                                                                </>
+                                                            );
+                                                        })()}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
